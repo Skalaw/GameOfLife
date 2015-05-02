@@ -58,5 +58,4 @@ public class TimerHelper {
     public String getFPSParse() {
         return mFPS;
     }
-
 }

@@ -23,8 +23,8 @@ public class Cell implements SurfaceObject {
     private Cell mRTNeigh; // right top
     private Cell mRBNeigh; // right bottom
 
-    private static Paint mPaintCellAlive = new Paint();
-    private static Paint mPaintCellDead = new Paint();
+    private static final Paint mPaintCellAlive = new Paint();
+    private static final Paint mPaintCellDead = new Paint();
 
     static {
         mPaintCellAlive.setColor(0xFF33B5E5);
