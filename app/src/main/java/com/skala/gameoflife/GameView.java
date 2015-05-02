@@ -9,20 +9,17 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
-
 import com.skala.gameoflife.surfaceobject.Cell;
 import com.skala.gameoflife.surfaceobject.TextObj;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * @author Skala
  */
 
 public class GameView extends SurfaceView implements Runnable, View.OnTouchListener {
-    private final static long INTERVAL = 200;
     private final static int ROW_CELL = 10;
     private final static int COLUMN_CELL = 10;
 
@@ -32,15 +29,10 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private Paint mPaintTime = new Paint();
     private Paint mPaintFPS = new Paint();
 
+    private TimerHelper mTimerHelper;
+
     private int mWidthScreen;
     private int mHeightScreen;
-
-    private long mTimeStart = 0;
-    private String mFPS = "";
-    private DecimalFormat mDF = new DecimalFormat("#.#");
-    private long mTimeSec = 0;
-    private long mTimeMilis;
-    private long mPreviousStateTimeMilis = 0;
 
     private TextObj mTextReset;
     private TextObj mTextRandom;
@@ -80,6 +72,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mTextPlay.setText("PLAY");
 
         setOnTouchListener(this);
+
+        mTimerHelper = new TimerHelper();
     }
 
     private ArrayList<Cell> createBoard(int sizeCell) {
@@ -112,64 +106,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
     private void setNeighbour() {
         Cell cell;
-
-        // kod szybciej się wykonuje alemniej czytelny
-        /*for (int i = 0; i < COLUMN_CELL; i++) {
-            int columnCount = i * ROW_CELL;
-            for (int j = 0; j < ROW_CELL; j++) {
-                cell = mCellList.get(columnCount + j);
-
-                // right
-                int right = columnCount + (j + 1) % ROW_CELL;
-
-                // left
-                int pos = (j - 1);
-                if (pos < 0) {
-                    pos += ROW_CELL;
-                }
-                int left = columnCount + pos;
-
-                // top
-                int top = (columnCount + j - ROW_CELL);
-                if (top < 0) {
-                    top += COLUMN_CELL * ROW_CELL;
-                }
-
-                // bottom
-                int bottom = (columnCount + j + ROW_CELL) % (COLUMN_CELL * ROW_CELL);
-
-                // right top
-                int mRTNeigh = right - ROW_CELL;
-                if (mRTNeigh < 0) {
-                    mRTNeigh += COLUMN_CELL * ROW_CELL;
-                }
-
-                // right bottom
-                int mRBNeigh = (right + ROW_CELL) % (COLUMN_CELL * ROW_CELL);
-
-                // left top
-                int mLTNeigh = left - ROW_CELL;
-                if (mLTNeigh < 0) {
-                    mLTNeigh += COLUMN_CELL * ROW_CELL;
-                }
-
-                // left bottom
-                int mLBNeigh = (left + ROW_CELL) % (COLUMN_CELL * ROW_CELL);
-
-
-                cell.setRightNeight(mCellList.get(right));
-                cell.setLeftNeigh(mCellList.get(left));
-                cell.setTopNeigh(mCellList.get(top));
-                cell.setBottomNeight(mCellList.get(bottom));
-
-                cell.setRTNeigh(mCellList.get(mRTNeigh));
-                cell.setRBNeigh(mCellList.get(mRBNeigh));
-                cell.setLTNeigh(mCellList.get(mLTNeigh));
-                cell.setLBNeigh(mCellList.get(mLBNeigh));
-
-                //Log.d("GameView", "Aktualny: " + (i * COLUMN_CELL + j) + " left: " + left + " right: " + right + " top: " + top + " bottom: " + bottom + " lt: " + mLTNeigh + " lb: " + mLBNeigh + " rt: " + mRTNeigh + " rb: " + mRBNeigh);
-            }
-        }*/
 
         int size = mCellList.size();
         for (int i = 0; i < size; i++) {
@@ -234,11 +170,9 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     }
 
     public void onResume() {
-        mTimeStart = System.currentTimeMillis();
+        mTimerHelper.onResume();
+
         mRunningGame = true;
-
-        mTimes.addLast((double) System.nanoTime());
-
         mThreadGame = new Thread(this);
         mThreadGame.start();
     }
@@ -263,14 +197,12 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             if (!mHolder.getSurface().isValid()) {
                 continue;
             }
-            mTimeMilis = System.currentTimeMillis();
-            mTimeSec = (mTimeMilis - mTimeStart) / 1000;
-            mFPS = mDF.format(getFPS());
 
-            if (mPlayGame && (mPreviousStateTimeMilis + INTERVAL < mTimeMilis)) {
+            mTimerHelper.nextFrame();
+
+            if (mPlayGame && mTimerHelper.isNextFrameAvailable()) {
                 game();
-
-                mPreviousStateTimeMilis = mTimeMilis;
+                mTimerHelper.setStateTime();
             }
 
             Canvas c = mHolder.lockCanvas();
@@ -292,8 +224,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mTextReset.onDraw(canvas);
         mTextPlay.onDraw(canvas);
 
-        canvas.drawText(String.valueOf(mTimeSec), 380, 32, mPaintTime);
-        canvas.drawText("FPS: " + mFPS, 580, 32, mPaintFPS);
+        canvas.drawText(String.valueOf(mTimerHelper.getTimeInSec()), 380, 32, mPaintTime);
+        canvas.drawText("FPS: " + mTimerHelper.getFPSParse(), 580, 32, mPaintFPS);
     }
 
     @Override
@@ -332,21 +264,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                 break;
         }
         return true;
-    }
-
-    private LinkedList<Double> mTimes = new LinkedList<>();
-    private final int MAX_SIZE = 100;
-    private final double NANOS = 1000000000.0;
-
-    private double getFPS() {
-        double lastTime = System.nanoTime();
-        double difference = (lastTime - mTimes.getFirst()) / NANOS;
-        mTimes.addLast(lastTime);
-        int size = mTimes.size();
-        if (size > MAX_SIZE) {
-            mTimes.removeFirst();
-        }
-        return difference > 0 ? mTimes.size() / difference : 0.0;
     }
 
     private void resetBoard() {
