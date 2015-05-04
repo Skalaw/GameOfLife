@@ -9,14 +9,22 @@ import java.util.Random;
  * @author Skala
  */
 public class GameBoard implements SurfaceObject {
-    private final static int ROW_CELL = 10;
-    private final static int COLUMN_CELL = 10;
+    private final static int DEFAULT_ROW_CELL = 10;
+    private final static int DEFAULT_COLUMN_CELL = 10;
 
     private ArrayList<Cell> mCellList;
+    private int mRowCell;
+    private int mColumnCell;
 
     public GameBoard(int sizeBoard, int offsetX, int offsetY) {
-        int sizeCell = sizeBoard / ROW_CELL;
+        this(sizeBoard, offsetX, offsetY, DEFAULT_ROW_CELL, DEFAULT_COLUMN_CELL);
+    }
 
+    public GameBoard(int sizeBoard, int offsetX, int offsetY, int numberRow, int numberColumn) {
+        mRowCell = numberRow;
+        mColumnCell = numberColumn;
+
+        int sizeCell = sizeBoard / mRowCell;
         mCellList = createBoard(sizeCell, offsetX, offsetY);
     }
 
@@ -67,13 +75,13 @@ public class GameBoard implements SurfaceObject {
         int spaceX, spaceY = 1;
 
         Cell cell;
-        for (int i = 0; i < COLUMN_CELL; i++) {
+        for (int i = 0; i < mColumnCell; i++) {
             int top = i * sizeCell + offsetY + spaceY;
             int bottom = top + sizeCell;
 
             spaceX = 1;
             spaceY++;
-            for (int j = 0; j < ROW_CELL; j++) {
+            for (int j = 0; j < mRowCell; j++) {
                 int left = j * sizeCell + offsetX + spaceX;
                 int right = left + sizeCell;
                 cell = new Cell(left, top, right, bottom);
@@ -124,32 +132,32 @@ public class GameBoard implements SurfaceObject {
     }
 
     private int getRightCell(int number) {
-        int integerDivision = number / ROW_CELL;
-        int modulo = (number + 1) % ROW_CELL;
-        return integerDivision * ROW_CELL + modulo;
+        int integerDivision = number / mRowCell;
+        int modulo = (number + 1) % mRowCell;
+        return integerDivision * mRowCell + modulo;
     }
 
     private int getLeftCell(int number) {
-        int integerDivision = number / ROW_CELL;
-        int modulo = number % ROW_CELL;
+        int integerDivision = number / mRowCell;
+        int modulo = number % mRowCell;
         if (modulo == 0) {
-            modulo = ROW_CELL;
+            modulo = mRowCell;
         }
         modulo--;
 
-        return integerDivision * ROW_CELL + modulo;
+        return integerDivision * mRowCell + modulo;
     }
 
     private int getTopCell(int number) {
-        int top = (number - ROW_CELL);
+        int top = (number - mRowCell);
         if (top < 0) {
-            top += COLUMN_CELL * ROW_CELL;
+            top += mColumnCell * mRowCell;
         }
         return top;
     }
 
     private int getBottomCell(int number) {
-        int bottom = (number + ROW_CELL) % (COLUMN_CELL * ROW_CELL);
+        int bottom = (number + mRowCell) % (mColumnCell * mRowCell);
         return bottom;
     }
 

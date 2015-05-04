@@ -20,6 +20,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private Thread mThreadGame;
     private boolean mRunningGame = false;
     private SurfaceHolder mHolder;
+    private SurfaceListener mSurfaceListener;
+
     private Paint mPaintTime = new Paint();
     private Paint mPaintFPS = new Paint();
 
@@ -32,6 +34,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private TextObj mTextReset;
     private TextObj mTextRandom;
     private TextObj mTextPlay;
+    private TextObj mTextSettings;
 
     private boolean mPlayGame = false;
     private boolean mRequiresRender = true;
@@ -51,26 +54,24 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mPaintFPS.setTextAlign(Paint.Align.LEFT);
         mPaintFPS.setTextSize(42);
 
-        // size and location board
-        int sizeBoard = (int) ((float) widthScreen * 0.8f);
-        int offsetX = (int) (mWidthScreen * 0.1f);
-        int offsetY = (int) (mWidthScreen * 0.1f);
-
-        mGameBoard = new GameBoard(sizeBoard, offsetX, offsetY);
+        loadSettings();
 
         int halfScreen = mWidthScreen / 2;
-        final int widthButton = 90;
+        final int widthButton = 100;
         int left = halfScreen - widthButton;
         int right = halfScreen + widthButton;
 
-        mTextRandom = new TextObj(left, 780, right, 840);
+        mTextRandom = new TextObj(left, 740, right, 800);
         mTextRandom.setText("RANDOM");
 
-        mTextReset = new TextObj(left, 870, right, 930);
+        mTextReset = new TextObj(left, 830, right, 890);
         mTextReset.setText("RESET");
 
-        mTextPlay = new TextObj(left, 960, right, 1020);
+        mTextPlay = new TextObj(left, 920, right, 980);
         mTextPlay.setText("PLAY");
+
+        mTextSettings = new TextObj(left, 1010, right, 1070);
+        mTextSettings.setText("SETTINGS");
 
         setOnTouchListener(this);
 
@@ -135,6 +136,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mTextRandom.onDraw(canvas);
         mTextReset.onDraw(canvas);
         mTextPlay.onDraw(canvas);
+        mTextSettings.onDraw(canvas);
 
         canvas.drawText(String.valueOf(mTimerHelper.getTimeInSec()), 380, 32, mPaintTime);
     }
@@ -158,6 +160,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                     mGameBoard.randomBoard();
                 } else if (mTextPlay.isClicked(x, y)) {
                     playGame();
+                } else if (mTextSettings.isClicked(x, y)) {
+                    mSurfaceListener.openDrawer();
                 }
 
                 mRequiresRender = true;
@@ -179,5 +183,17 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         } else {
             mTextPlay.setText("PLAY");
         }
+    }
+
+    public void setSurfaceListener(SurfaceListener surfaceListener) {
+        mSurfaceListener = surfaceListener;
+    }
+
+    public void loadSettings() {
+        // size and location board
+        int sizeBoard = (int) ((float) mWidthScreen * 0.8f);
+        int offsetX = (int) (mWidthScreen * 0.1f);
+        int offsetY = (int) (mWidthScreen * 0.1f);
+        mGameBoard = new GameBoard(sizeBoard, offsetX, offsetY);
     }
 }
