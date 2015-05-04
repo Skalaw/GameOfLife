@@ -34,6 +34,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private TextObj mTextPlay;
 
     private boolean mPlayGame = false;
+    private boolean mRequiresRender = true;
 
     public GameView(Context context) {
         super(context);
@@ -106,15 +107,23 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             }
 
             mTimerHelper.nextFrame();
+            if (mTimerHelper.isNextSec()) {
+                mRequiresRender = true;
+            }
 
             if (mPlayGame && mTimerHelper.isNextFrameAvailable()) {
                 mGameBoard.game();
                 mTimerHelper.setStateTime();
+
+                mRequiresRender = true;
             }
 
-            Canvas c = mHolder.lockCanvas();
-            onDraw(c);
-            mHolder.unlockCanvasAndPost(c);
+            if (mRequiresRender) {
+                Canvas c = mHolder.lockCanvas();
+                onDraw(c);
+                mHolder.unlockCanvasAndPost(c);
+                mRequiresRender = false;
+            }
         }
     }
 
@@ -128,7 +137,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mTextPlay.onDraw(canvas);
 
         canvas.drawText(String.valueOf(mTimerHelper.getTimeInSec()), 380, 32, mPaintTime);
-        canvas.drawText("FPS: " + mTimerHelper.getFPSParse(), 580, 32, mPaintFPS);
     }
 
     @Override
@@ -151,6 +159,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                 } else if (mTextPlay.isClicked(x, y)) {
                     playGame();
                 }
+
+                mRequiresRender = true;
 
                 //endTouchPut();
                 break;

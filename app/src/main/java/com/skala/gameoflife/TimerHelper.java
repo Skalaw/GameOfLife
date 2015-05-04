@@ -14,6 +14,7 @@ public class TimerHelper {
     private String mFPS = "";
     private DecimalFormat mDF = new DecimalFormat("#.#");
     private long mTimeSec = 0;
+    private long mPreviousCheckTimeSec = 0;
     private long mTimeMilis;
     private long mPreviousStateTimeMilis = 0;
 
@@ -29,11 +30,17 @@ public class TimerHelper {
     public void nextFrame() {
         mTimeMilis = System.currentTimeMillis();
         mTimeSec = (mTimeMilis - mTimeStart) / 1000;
-        mFPS = mDF.format(getFPS());
+        //mFPS = mDF.format(getFPS());
     }
 
     public boolean isNextFrameAvailable() {
         return mPreviousStateTimeMilis + INTERVAL < mTimeMilis;
+    }
+
+    public boolean isNextSec() {
+        boolean value = mTimeSec != mPreviousCheckTimeSec;
+        mPreviousCheckTimeSec = mTimeSec;
+        return value;
     }
 
     public void setStateTime() {
