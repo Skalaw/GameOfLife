@@ -5,4 +5,5 @@ package com.skala.gameoflife;
  */
 public interface SettingsDrawerListener {
     void refreshSurface();
+    void updateTimeInterval();
 }

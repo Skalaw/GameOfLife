@@ -8,7 +8,7 @@ import java.util.LinkedList;
  */
 
 public class TimerHelper {
-    private final static long INTERVAL = 200;
+    private long mUpdateInterval;
 
     private long mTimeStart = 0;
     private String mFPS = "";
@@ -34,13 +34,17 @@ public class TimerHelper {
     }
 
     public boolean isNextFrameAvailable() {
-        return mPreviousStateTimeMilis + INTERVAL < mTimeMilis;
+        return mPreviousStateTimeMilis + mUpdateInterval < mTimeMilis;
     }
 
     public boolean isNextSec() {
         boolean value = mTimeSec != mPreviousCheckTimeSec;
         mPreviousCheckTimeSec = mTimeSec;
         return value;
+    }
+
+    public void setUpdateInterval(int time) {
+        mUpdateInterval = time;
     }
 
     public void setStateTime() {

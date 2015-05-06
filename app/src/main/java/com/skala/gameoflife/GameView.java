@@ -54,7 +54,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mPaintFPS.setTextAlign(Paint.Align.LEFT);
         mPaintFPS.setTextSize(42);
 
-        loadSettings();
+        mTimerHelper = new TimerHelper();
+        updateSettings(GameBoard.DEFAULT_ROW_CELL, GameBoard.DEFAULT_COLUMN_CELL);
 
         int halfScreen = mWidthScreen / 2;
         final int widthButton = 100;
@@ -74,8 +75,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mTextSettings.setText("SETTINGS");
 
         setOnTouchListener(this);
-
-        mTimerHelper = new TimerHelper();
     }
 
     public void onResume() {
@@ -189,11 +188,18 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mSurfaceListener = surfaceListener;
     }
 
-    public void loadSettings() {
+    public void updateSettings(int row, int column) {
         // size and location board
         int sizeBoard = (int) ((float) mWidthScreen * 0.8f);
         int offsetX = (int) (mWidthScreen * 0.1f);
         int offsetY = (int) (mWidthScreen * 0.1f);
         mGameBoard = new GameBoard(sizeBoard, offsetX, offsetY);
+
+        mRequiresRender = true;
     }
+
+    public void setUpdateInterval(int updateTime) {
+        mTimerHelper.setUpdateInterval(updateTime);
+    }
+
 }

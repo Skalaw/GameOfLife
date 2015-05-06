@@ -9,8 +9,8 @@ import java.util.Random;
  * @author Skala
  */
 public class GameBoard implements SurfaceObject {
-    private final static int DEFAULT_ROW_CELL = 10;
-    private final static int DEFAULT_COLUMN_CELL = 10;
+    public final static int DEFAULT_ROW_CELL = 10;
+    public final static int DEFAULT_COLUMN_CELL = 10;
 
     private ArrayList<Cell> mCellList;
     private int mRowCell;

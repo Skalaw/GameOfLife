@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="category_time">Time</string>
+
+    <string name="interval_update_dialog_title">Set Time(ms)</string>
+    <string name="interval_update_key">interval_update_preference</string>
+    <string name="interval_update_summary">Update time game</string>
+    <string name="interval_update_title">Interval</string>
+    <string name="interval_update_default">200</string>
+
+</resources>
