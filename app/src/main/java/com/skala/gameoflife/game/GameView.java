@@ -1,4 +1,4 @@
-package com.skala.gameoflife;
+package com.skala.gameoflife.game;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,8 +9,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import com.skala.gameoflife.surfaceobject.GameBoard;
-import com.skala.gameoflife.surfaceobject.TextObj;
+import com.skala.gameoflife.game.helpers.TimerHelper;
+import com.skala.gameoflife.game.surfaceobject.GameBoard;
+import com.skala.gameoflife.game.surfaceobject.TextObj;
 
 /**
  * @author Skala
@@ -43,7 +44,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         super(context);
     }
 
-    public void init(int widthScreen, int heightScreen) {
+    public void init(int widthScreen, int heightScreen, int row, int column) {
         mWidthScreen = widthScreen;
         mHeightScreen = heightScreen;
 
@@ -55,7 +56,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mPaintFPS.setTextSize(42);
 
         mTimerHelper = new TimerHelper();
-        updateSettings(GameBoard.DEFAULT_ROW_CELL, GameBoard.DEFAULT_COLUMN_CELL);
+        updateBoard(row, column);
 
         int halfScreen = mWidthScreen / 2;
         final int widthButton = 100;
@@ -188,12 +189,12 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mSurfaceListener = surfaceListener;
     }
 
-    public void updateSettings(int row, int column) {
+    public void updateBoard(int row, int column) {
         // size and location board
         int sizeBoard = (int) ((float) mWidthScreen * 0.8f);
         int offsetX = (int) (mWidthScreen * 0.1f);
         int offsetY = (int) (mWidthScreen * 0.1f);
-        mGameBoard = new GameBoard(sizeBoard, offsetX, offsetY);
+        mGameBoard = new GameBoard(sizeBoard, offsetX, offsetY, row, column);
 
         mRequiresRender = true;
     }

@@ -1,4 +1,4 @@
-package com.skala.gameoflife;
+package com.skala.gameoflife.settings;
 
 import android.os.Bundle;
 import android.preference.Preference;
@@ -7,12 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.skala.gameoflife.R;
+
 /**
  * @author Skala
  */
 public class SettingsFragment extends PreferenceFragment {
-    private boolean mIsRefreshIntervalUpdate = false;
     private SettingsDrawerListener mSettingsListener;
+
+    private boolean mIsRefreshIntervalUpdate = false;
+    private boolean mIsBoardRowUpdate = false;
+    private boolean mIsBoardColumnUpdate = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,24 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
+        key = getResources().getString(R.string.board_row_key);
+        getPreferenceManager().findPreference(key).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                mIsBoardRowUpdate = true;
+                return true;
+            }
+        });
+
+        key = getResources().getString(R.string.board_column_key);
+        getPreferenceManager().findPreference(key).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                mIsBoardColumnUpdate = true;
+                return true;
+            }
+        });
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -41,6 +64,13 @@ public class SettingsFragment extends PreferenceFragment {
             mSettingsListener.updateTimeInterval();
             mIsRefreshIntervalUpdate = false;
         }
+
+        if (mIsBoardRowUpdate || mIsBoardColumnUpdate) {
+            mSettingsListener.updateSizeBoard();
+            mIsBoardRowUpdate = false;
+            mIsBoardColumnUpdate = false;
+        }
+
     }
 
     public void setSettingsListener(SettingsDrawerListener settingsListener) {

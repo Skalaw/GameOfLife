@@ -4,11 +4,30 @@
         android:title="@string/category_time"/>
 
     <EditTextPreference
-        android:defaultValue="@string/interval_update_default"
+        android:defaultValue="@integer/interval_update_default"
         android:dialogTitle="@string/interval_update_dialog_title"
         android:inputType="number"
         android:key="@string/interval_update_key"
         android:summary="@string/interval_update_summary"
         android:title="@string/interval_update_title"/>
+
+    <PreferenceCategory
+        android:title="@string/category_board"/>
+
+    <EditTextPreference
+        android:defaultValue="@integer/board_row_default"
+        android:dialogTitle="@string/board_row_dialog_title"
+        android:inputType="number"
+        android:key="@string/board_row_key"
+        android:summary="@string/board_row_summary"
+        android:title="@string/board_row_title"/>
+
+    <EditTextPreference
+        android:defaultValue="@integer/board_column_default"
+        android:dialogTitle="@string/board_column_dialog_title"
+        android:inputType="number"
+        android:key="@string/board_column_key"
+        android:summary="@string/board_column_summary"
+        android:title="@string/board_column_title"/>
 
 </PreferenceScreen>

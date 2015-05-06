@@ -1,9 +1,9 @@
-package com.skala.gameoflife;
+package com.skala.gameoflife.settings;
 
 /**
  * @author Skala
  */
 public interface SettingsDrawerListener {
-    void refreshSurface();
+    void updateSizeBoard();
     void updateTimeInterval();
 }

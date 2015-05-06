@@ -1,4 +1,4 @@
-package com.skala.gameoflife.surfaceobject;
+package com.skala.gameoflife.game.surfaceobject;
 
 import android.graphics.Canvas;
 
@@ -9,16 +9,9 @@ import java.util.Random;
  * @author Skala
  */
 public class GameBoard implements SurfaceObject {
-    public final static int DEFAULT_ROW_CELL = 10;
-    public final static int DEFAULT_COLUMN_CELL = 10;
-
     private ArrayList<Cell> mCellList;
     private int mRowCell;
     private int mColumnCell;
-
-    public GameBoard(int sizeBoard, int offsetX, int offsetY) {
-        this(sizeBoard, offsetX, offsetY, DEFAULT_ROW_CELL, DEFAULT_COLUMN_CELL);
-    }
 
     public GameBoard(int sizeBoard, int offsetX, int offsetY, int numberRow, int numberColumn) {
         mRowCell = numberRow;

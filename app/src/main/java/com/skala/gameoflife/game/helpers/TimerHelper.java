@@ -1,4 +1,4 @@
-package com.skala.gameoflife;
+package com.skala.gameoflife.game.helpers;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;

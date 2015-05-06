@@ -6,6 +6,20 @@
     <string name="interval_update_key">interval_update_preference</string>
     <string name="interval_update_summary">Update time game</string>
     <string name="interval_update_title">Interval</string>
-    <string name="interval_update_default">200</string>
+    <integer name="interval_update_default">200</integer>
+
+    <string name="category_board">Board</string>
+
+    <string name="board_row_dialog_title">Set rows</string>
+    <string name="board_row_key">board_row_preference</string>
+    <string name="board_row_summary">Number of rows</string>
+    <string name="board_row_title">Row</string>
+    <integer name="board_row_default">10</integer>
+
+    <string name="board_column_dialog_title">Set columns</string>
+    <string name="board_column_key">board_column_preference</string>
+    <string name="board_column_summary">Number of columns</string>
+    <string name="board_column_title">Column</string>
+    <integer name="board_column_default">10</integer>
 
 </resources>

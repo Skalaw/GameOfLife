@@ -1,4 +1,4 @@
-package com.skala.gameoflife.surfaceobject;
+package com.skala.gameoflife.game.surfaceobject;
 
 import android.graphics.Canvas;
 

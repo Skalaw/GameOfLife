@@ -11,6 +11,11 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.skala.gameoflife.game.GameView;
+import com.skala.gameoflife.game.SurfaceListener;
+import com.skala.gameoflife.settings.SettingsDrawerListener;
+import com.skala.gameoflife.settings.SettingsFragment;
+
 /**
  * @author Skala
  */
@@ -30,11 +35,11 @@ public class MainActivity extends Activity {
 
     private SettingsDrawerListener mSettingsDrawerListener = new SettingsDrawerListener() {
         @Override
-        public void refreshSurface() {
-            int row = 10; // TODO
-            int column = 10;
+        public void updateSizeBoard() {
+            int row = getRowsNumber();
+            int column = getColumnsNumber();
 
-            mGameView.updateSettings(row, column);
+            mGameView.updateBoard(row, column);
         }
 
         @Override
@@ -48,7 +53,7 @@ public class MainActivity extends Activity {
     public int getIntervalUpdateValue() {
         String key = getString(R.string.interval_update_key);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String defaultValue = getString(R.string.interval_update_default);
+        String defaultValue = String.valueOf(getResources().getInteger(R.integer.interval_update_default));
         String value = sharedPreferences.getString(key, defaultValue);
 
         int updateTime;
@@ -60,15 +65,51 @@ public class MainActivity extends Activity {
         return updateTime;
     }
 
+    public int getRowsNumber() {
+        String key = getString(R.string.board_row_key);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String defaultValue = String.valueOf(getResources().getInteger(R.integer.board_row_default));
+        String value = sharedPreferences.getString(key, defaultValue);
+
+        int rowNumber;
+        if (value.isEmpty()) {
+            rowNumber = 3; // minimum value
+        } else {
+            rowNumber = Integer.parseInt(value);
+            if (rowNumber < 3) {
+                rowNumber = 3;
+            }
+        }
+
+        return rowNumber;
+    }
+
+    public int getColumnsNumber() {
+        String key = getString(R.string.board_column_key);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String defaultValue = String.valueOf(getResources().getInteger(R.integer.board_column_default));
+        String value = sharedPreferences.getString(key, defaultValue);
+
+        int columnNumber;
+        if (value.isEmpty()) {
+            columnNumber = 3; // minimum value
+        } else {
+            columnNumber = Integer.parseInt(value);
+            if (columnNumber < 3) {
+                columnNumber = 3;
+            }
+        }
+
+        return columnNumber;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-
         setContentView(R.layout.activity_main);
 
+        // load settings drawer
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         mSettingsFragment = new SettingsFragment();
@@ -76,16 +117,9 @@ public class MainActivity extends Activity {
         fragmentTransaction.add(R.id.leftDrawer, mSettingsFragment);
         fragmentTransaction.commit();
 
-
-        mGameView = new GameView(this);
-        mGameView.init(displaymetrics.widthPixels, displaymetrics.heightPixels);
-        mGameView.setSurfaceListener(mSurfaceListener);
-        mSettingsDrawerListener.updateTimeInterval();  // TODO: poprawic
-        ((ViewGroup) findViewById(R.id.content)).addView(mGameView);
-
+        // drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mLeftDrawer = (ViewGroup) findViewById(R.id.leftDrawer);
-
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -105,6 +139,16 @@ public class MainActivity extends Activity {
 
             }
         });
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+
+        // create game
+        mGameView = new GameView(this);
+        mGameView.init(displaymetrics.widthPixels, displaymetrics.heightPixels, getRowsNumber(), getColumnsNumber());
+        mGameView.setSurfaceListener(mSurfaceListener);
+        mSettingsDrawerListener.updateTimeInterval();  // TODO: poprawic
+        ((ViewGroup) findViewById(R.id.content)).addView(mGameView);
     }
 
     @Override
