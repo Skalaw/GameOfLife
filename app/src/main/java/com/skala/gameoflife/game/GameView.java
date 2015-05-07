@@ -191,9 +191,9 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
     public void updateBoard(int row, int column) {
         // size and location board
-        int sizeBoard = (int) ((float) mWidthScreen * 0.8f);
-        int offsetX = (int) (mWidthScreen * 0.1f);
-        int offsetY = (int) (mWidthScreen * 0.1f);
+        int sizeBoard = (int) ((float) mWidthScreen * 0.9f);
+        int offsetX = (int) (mWidthScreen * 0.05f);
+        int offsetY = (int) (mWidthScreen * 0.05f);
         mGameBoard = new GameBoard(sizeBoard, offsetX, offsetY, row, column);
 
         mRequiresRender = true;

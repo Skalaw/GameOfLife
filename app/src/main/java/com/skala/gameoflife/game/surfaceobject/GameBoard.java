@@ -17,8 +17,7 @@ public class GameBoard implements SurfaceObject {
         mRowCell = numberRow;
         mColumnCell = numberColumn;
 
-        int sizeCell = sizeBoard / mRowCell;
-        mCellList = createBoard(sizeCell, offsetX, offsetY);
+        mCellList = createBoard(sizeBoard, offsetX, offsetY);
     }
 
     @Override
@@ -61,11 +60,13 @@ public class GameBoard implements SurfaceObject {
         }
     }
 
-    private ArrayList<Cell> createBoard(int sizeCell, int offsetX, int offsetY) {
+    private ArrayList<Cell> createBoard(int sizeBoard, int offsetX, int offsetY) {
         ArrayList<Cell> arrayList = new ArrayList<>();
 
         // distance between cells
-        int spaceX, spaceY = 1;
+        int spaceX = 1, spaceY = 1;
+
+        int sizeCell = (sizeBoard / mRowCell) - spaceX;
 
         Cell cell;
         for (int i = 0; i < mColumnCell; i++) {
