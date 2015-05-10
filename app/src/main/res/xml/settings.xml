@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="@string/category_time"/>
-
-    <EditTextPreference
-        android:defaultValue="@integer/interval_update_default"
-        android:dialogTitle="@string/interval_update_dialog_title"
-        android:inputType="number"
-        android:key="@string/interval_update_key"
-        android:summary="@string/interval_update_summary"
-        android:title="@string/interval_update_title"/>
 
     <PreferenceCategory
         android:title="@string/category_board"/>
@@ -29,5 +19,21 @@
         android:key="@string/board_column_key"
         android:summary="@string/board_column_summary"
         android:title="@string/board_column_title"/>
+
+    <Preference
+        android:key="@string/board_list_key"
+        android:summary="@string/board_list_summary"
+        android:title="@string/board_list_title"/>
+
+    <PreferenceCategory
+        android:title="@string/category_time"/>
+
+    <EditTextPreference
+        android:defaultValue="@integer/interval_update_default"
+        android:dialogTitle="@string/interval_update_dialog_title"
+        android:inputType="number"
+        android:key="@string/interval_update_key"
+        android:summary="@string/interval_update_summary"
+        android:title="@string/interval_update_title"/>
 
 </PreferenceScreen>

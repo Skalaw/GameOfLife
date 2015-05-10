@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="category_time">Time</string>
-
-    <string name="interval_update_dialog_title">Set Time(ms)</string>
-    <string name="interval_update_key">interval_update_preference</string>
-    <string name="interval_update_summary">Update time game</string>
-    <string name="interval_update_title">Interval</string>
-    <integer name="interval_update_default">200</integer>
-
     <string name="category_board">Board</string>
 
     <string name="board_row_dialog_title">Set rows</string>
@@ -21,5 +13,19 @@
     <string name="board_column_summary">Number of columns</string>
     <string name="board_column_title">Column</string>
     <integer name="board_column_default">10</integer>
+
+    <string name="board_list_dialog_title">Load board</string>
+    <string name="board_list_key">board_list_preference</string>
+    <string name="board_list_summary">Check out the prepared boards</string>
+    <string name="board_list_title">Load board</string>
+
+
+    <string name="category_time">Time</string>
+
+    <string name="interval_update_dialog_title">Set Time(ms)</string>
+    <string name="interval_update_key">interval_update_preference</string>
+    <string name="interval_update_summary">Update time game</string>
+    <string name="interval_update_title">Interval</string>
+    <integer name="interval_update_default">200</integer>
 
 </resources>

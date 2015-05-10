@@ -15,6 +15,9 @@ import com.skala.gameoflife.game.GameView;
 import com.skala.gameoflife.game.SurfaceListener;
 import com.skala.gameoflife.settings.SettingsDrawerListener;
 import com.skala.gameoflife.settings.SettingsFragment;
+import com.skala.gameoflife.utils.FileUtils;
+
+import org.json.JSONObject;
 
 /**
  * @author Skala
@@ -48,6 +51,19 @@ public class MainActivity extends Activity {
 
             mGameView.setUpdateInterval(updateTime);
         }
+
+        @Override
+        public void closeDrawer() {
+            mDrawerLayout.closeDrawer(mLeftDrawer);
+        }
+
+        @Override
+        public void loadBoard(int loadBoardNumber) {
+            // TODO: convert board to fileName
+            JSONObject jsonObject = FileUtils.getBoardJSONFromAssets(getApplicationContext(), "Bagatela.json");
+
+            mGameView.loadBoard(jsonObject);
+        }
     };
 
     public int getIntervalUpdateValue() {
@@ -57,7 +73,7 @@ public class MainActivity extends Activity {
         String value = sharedPreferences.getString(key, defaultValue);
 
         int updateTime;
-        if (value.isEmpty()) {
+        if (value == null || value.isEmpty()) {
             updateTime = 0;
         } else {
             updateTime = Integer.parseInt(value);
@@ -72,7 +88,7 @@ public class MainActivity extends Activity {
         String value = sharedPreferences.getString(key, defaultValue);
 
         int rowNumber;
-        if (value.isEmpty()) {
+        if (value == null || value.isEmpty()) {
             rowNumber = 3; // minimum value
         } else {
             rowNumber = Integer.parseInt(value);

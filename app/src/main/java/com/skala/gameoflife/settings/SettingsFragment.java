@@ -1,5 +1,8 @@
 package com.skala.gameoflife.settings;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -18,6 +21,7 @@ public class SettingsFragment extends PreferenceFragment {
     private boolean mIsRefreshIntervalUpdate = false;
     private boolean mIsBoardRowUpdate = false;
     private boolean mIsBoardColumnUpdate = false;
+    private int mLoadBoardNumber = -1; // -1 - not load
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class SettingsFragment extends PreferenceFragment {
         String key;
 
         key = getResources().getString(R.string.interval_update_key);
-        getPreferenceManager().findPreference(key).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        findPreference(key).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 mIsRefreshIntervalUpdate = true;
@@ -39,7 +43,7 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
         key = getResources().getString(R.string.board_row_key);
-        getPreferenceManager().findPreference(key).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        findPreference(key).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 mIsBoardRowUpdate = true;
@@ -48,7 +52,7 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
         key = getResources().getString(R.string.board_column_key);
-        getPreferenceManager().findPreference(key).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        findPreference(key).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 mIsBoardColumnUpdate = true;
@@ -56,7 +60,35 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
+        key = getResources().getString(R.string.board_list_key);
+        findPreference(key).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                createListBoardsPreferenceDialog();
+                return false;
+
+            }
+        });
+
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    private void createListBoardsPreferenceDialog() {
+        Dialog dialog;
+        final String[] str = {"Bagatela"}; // TODO: get list from folder assets
+        AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+        b.setTitle(R.string.board_list_dialog_title);
+        b.setItems(str, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+                mLoadBoardNumber = position;
+                mSettingsListener.closeDrawer();
+            }
+        });
+        b.setNegativeButton("Cancel", null);
+
+        dialog = b.create();
+        dialog.show();
+
     }
 
     public void updateSettings() {
@@ -65,12 +97,17 @@ public class SettingsFragment extends PreferenceFragment {
             mIsRefreshIntervalUpdate = false;
         }
 
-        if (mIsBoardRowUpdate || mIsBoardColumnUpdate) {
-            mSettingsListener.updateSizeBoard();
-            mIsBoardRowUpdate = false;
-            mIsBoardColumnUpdate = false;
+        // first load custom board if is choice, if not then check is update size boards
+        if (mLoadBoardNumber != -1) {
+            mSettingsListener.loadBoard(mLoadBoardNumber);
+            mLoadBoardNumber = -1; // set to not choice for next close drawer
+        } else {
+            if (mIsBoardRowUpdate || mIsBoardColumnUpdate) {
+                mSettingsListener.updateSizeBoard();
+                mIsBoardRowUpdate = false;
+                mIsBoardColumnUpdate = false;
+            }
         }
-
     }
 
     public void setSettingsListener(SettingsDrawerListener settingsListener) {

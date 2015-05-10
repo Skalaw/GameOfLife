@@ -13,6 +13,8 @@ import com.skala.gameoflife.game.helpers.TimerHelper;
 import com.skala.gameoflife.game.surfaceobject.GameBoard;
 import com.skala.gameoflife.game.surfaceobject.TextObj;
 
+import org.json.JSONObject;
+
 /**
  * @author Skala
  */
@@ -56,6 +58,12 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mPaintFPS.setTextSize(42);
 
         mTimerHelper = new TimerHelper();
+
+        // size and location board
+        int sizeBoard = (int) ((float) mWidthScreen * 0.9f);
+        int offsetX = (int) (mWidthScreen * 0.05f);
+        int offsetY = (int) (mWidthScreen * 0.05f);
+        mGameBoard = new GameBoard(sizeBoard, offsetX, offsetY);
         updateBoard(row, column);
 
         int halfScreen = mWidthScreen / 2;
@@ -190,11 +198,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     }
 
     public void updateBoard(int row, int column) {
-        // size and location board
-        int sizeBoard = (int) ((float) mWidthScreen * 0.9f);
-        int offsetX = (int) (mWidthScreen * 0.05f);
-        int offsetY = (int) (mWidthScreen * 0.05f);
-        mGameBoard = new GameBoard(sizeBoard, offsetX, offsetY, row, column);
+        mGameBoard.createBoard(row, column);
 
         mRequiresRender = true;
     }
@@ -203,4 +207,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         mTimerHelper.setUpdateInterval(updateTime);
     }
 
+    public void loadBoard(JSONObject loadBoardNumber) {
+        mGameBoard.loadBoard(loadBoardNumber);
+    }
 }

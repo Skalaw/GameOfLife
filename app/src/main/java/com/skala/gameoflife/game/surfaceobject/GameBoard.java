@@ -2,6 +2,10 @@ package com.skala.gameoflife.game.surfaceobject;
 
 import android.graphics.Canvas;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -12,12 +16,14 @@ public class GameBoard implements SurfaceObject {
     private ArrayList<Cell> mCellList;
     private int mRowCell;
     private int mColumnCell;
+    private int mSizeBoard;
+    private int mOffsetX;
+    private int mOffsetY;
 
-    public GameBoard(int sizeBoard, int offsetX, int offsetY, int numberRow, int numberColumn) {
-        mRowCell = numberRow;
-        mColumnCell = numberColumn;
-
-        mCellList = createBoard(sizeBoard, offsetX, offsetY);
+    public GameBoard(int sizeBoard, int offsetX, int offsetY) {
+        mSizeBoard = sizeBoard;
+        mOffsetX = offsetX;
+        mOffsetY = offsetY;
     }
 
     @Override
@@ -60,23 +66,67 @@ public class GameBoard implements SurfaceObject {
         }
     }
 
-    private ArrayList<Cell> createBoard(int sizeBoard, int offsetX, int offsetY) {
+    public void loadBoard(JSONObject jsonObject) {
+        boolean isLoadSuccesful;
+
+        int row = mRowCell;
+        int column = mColumnCell;
+        JSONArray jsonArray = null;
+
+        try {
+            row = jsonObject.getInt("row");
+            column = jsonObject.getInt("column");
+            jsonArray = jsonObject.getJSONArray("board");
+            isLoadSuccesful = true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            isLoadSuccesful = false;
+        }
+
+        if (jsonArray == null || jsonArray.length() != row * column) {
+            isLoadSuccesful = false;
+        }
+
+        // load only when parse correct json
+        if (isLoadSuccesful) {
+            createBoard(row, column);
+            // load array value
+            int length = jsonArray.length();
+            for (int i = 0; i < length; i++) {
+                try {
+                    boolean isAlive = (jsonArray.get(i) != 0);
+                    mCellList.get(i).setIsAlive(isAlive);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void createBoard(int numberRow, int numberColumn) {
+        mRowCell = numberRow;
+        mColumnCell = numberColumn;
+
+        mCellList = createBoard();
+    }
+
+    private ArrayList<Cell> createBoard() {
         ArrayList<Cell> arrayList = new ArrayList<>();
 
         // distance between cells
         int spaceX = 1, spaceY = 1;
 
-        int sizeCell = (sizeBoard / mRowCell) - spaceX;
+        int sizeCell = (mSizeBoard / mRowCell) - spaceX;
 
         Cell cell;
         for (int i = 0; i < mColumnCell; i++) {
-            int top = i * sizeCell + offsetY + spaceY;
+            int top = i * sizeCell + mOffsetY + spaceY;
             int bottom = top + sizeCell;
 
             spaceX = 1;
             spaceY++;
             for (int j = 0; j < mRowCell; j++) {
-                int left = j * sizeCell + offsetX + spaceX;
+                int left = j * sizeCell + mOffsetX + spaceX;
                 int right = left + sizeCell;
                 cell = new Cell(left, top, right, bottom);
                 arrayList.add(cell);
