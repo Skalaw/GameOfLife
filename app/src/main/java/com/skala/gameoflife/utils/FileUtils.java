@@ -77,4 +77,15 @@ public class FileUtils {
 
         return output;
     }
+
+    public static String[] getListBoardFromAssets(Context context) {
+        String[] listBoardsName = null;
+        try {
+            listBoardsName = context.getAssets().list(DIR_BOARDS);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return listBoardsName;
+    }
 }

@@ -11,17 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.skala.gameoflife.R;
+import com.skala.gameoflife.utils.FileUtils;
 
 /**
  * @author Skala
  */
 public class SettingsFragment extends PreferenceFragment {
+    private final String BOARD_NOT_LOAD = "";
+
     private SettingsDrawerListener mSettingsListener;
 
     private boolean mIsRefreshIntervalUpdate = false;
     private boolean mIsBoardRowUpdate = false;
     private boolean mIsBoardColumnUpdate = false;
-    private int mLoadBoardNumber = -1; // -1 - not load
+    private String mLoadBoardName = BOARD_NOT_LOAD;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,13 +77,13 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void createListBoardsPreferenceDialog() {
         Dialog dialog;
-        final String[] str = {"Bagatela"}; // TODO: get list from folder assets
+        final String[] boardsName = FileUtils.getListBoardFromAssets(getActivity());
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setTitle(R.string.board_list_dialog_title);
-        b.setItems(str, new DialogInterface.OnClickListener() {
+        b.setItems(boardsName, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
-                mLoadBoardNumber = position;
+                mLoadBoardName = boardsName[position];
                 mSettingsListener.closeDrawer();
             }
         });
@@ -88,7 +91,6 @@ public class SettingsFragment extends PreferenceFragment {
 
         dialog = b.create();
         dialog.show();
-
     }
 
     public void updateSettings() {
@@ -98,9 +100,9 @@ public class SettingsFragment extends PreferenceFragment {
         }
 
         // first load custom board if is choice, if not then check is update size boards
-        if (mLoadBoardNumber != -1) {
-            mSettingsListener.loadBoard(mLoadBoardNumber);
-            mLoadBoardNumber = -1; // set to not choice for next close drawer
+        if (!mLoadBoardName.equals(BOARD_NOT_LOAD)) {
+            mSettingsListener.loadBoard(mLoadBoardName);
+            mLoadBoardName = BOARD_NOT_LOAD; // set to not choice for next close drawer
         } else {
             if (mIsBoardRowUpdate || mIsBoardColumnUpdate) {
                 mSettingsListener.updateSizeBoard();

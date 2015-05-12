@@ -58,9 +58,9 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void loadBoard(int loadBoardNumber) {
+        public void loadBoard(String nameBoard) {
             // TODO: convert board to fileName
-            JSONObject jsonObject = FileUtils.getBoardJSONFromAssets(getApplicationContext(), "Bagatela.json");
+            JSONObject jsonObject = FileUtils.getBoardJSONFromAssets(getApplicationContext(), nameBoard);
 
             mGameView.loadBoard(jsonObject);
         }
