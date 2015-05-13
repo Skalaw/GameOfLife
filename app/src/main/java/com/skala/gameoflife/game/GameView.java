@@ -209,5 +209,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
     public void loadBoard(JSONObject loadBoardNumber) {
         mGameBoard.loadBoard(loadBoardNumber);
+
+        mRequiresRender = true;
     }
 }
