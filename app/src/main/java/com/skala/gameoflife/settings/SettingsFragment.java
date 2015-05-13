@@ -77,13 +77,21 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void createListBoardsPreferenceDialog() {
         Dialog dialog;
-        final String[] boardsName = FileUtils.getListBoardFromAssets(getActivity());
+        final String[] fileNames = FileUtils.getListBoardFromAssets(getActivity());
+        int fileCount = fileNames.length;
+        String[] displayNames = new String[fileCount];
+        for (int i = 0; i < fileCount; i++) {
+            if (fileNames[i].endsWith(".json")) {
+                displayNames[i] = fileNames[i].substring(0, fileNames[i].length() - 5);
+            }
+        }
+
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setTitle(R.string.board_list_dialog_title);
-        b.setItems(boardsName, new DialogInterface.OnClickListener() {
+        b.setItems(displayNames, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
-                mLoadBoardName = boardsName[position];
+                mLoadBoardName = fileNames[position];
                 mSettingsListener.closeDrawer();
             }
         });
