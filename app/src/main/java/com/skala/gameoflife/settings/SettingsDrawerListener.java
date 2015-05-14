@@ -7,5 +7,7 @@ public interface SettingsDrawerListener {
     void updateSizeBoard();
     void updateTimeInterval();
     void closeDrawer();
-    void loadBoard(String boardName);
+    void loadBoardFromAssets(String boardName);
+    void loadBoardFromExternal(String boardName);
+    void saveBoardToExternal(String fileName);
 }

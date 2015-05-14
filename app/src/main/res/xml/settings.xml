@@ -25,6 +25,17 @@
         android:summary="@string/board_list_summary"
         android:title="@string/board_list_title"/>
 
+    <Preference
+        android:key="@string/board_list_external_key"
+        android:summary="@string/board_list_external_summary"
+        android:title="@string/board_list_external_title"/>
+
+    <EditTextPreference
+        android:dialogTitle="@string/board_save_dialog_title"
+        android:key="@string/board_save_key"
+        android:summary="@string/board_save_summary"
+        android:title="@string/board_save_title"/>
+
     <PreferenceCategory
         android:title="@string/category_time"/>
 

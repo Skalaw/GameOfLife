@@ -19,6 +19,15 @@
     <string name="board_list_summary">Check out the prepared boards</string>
     <string name="board_list_title">Load board</string>
 
+    <string name="board_list_dialog_external_title">Load board</string>
+    <string name="board_list_external_key">board_list_external_preference</string>
+    <string name="board_list_external_summary">Load your boards from external storage</string>
+    <string name="board_list_external_title">Load board</string>
+
+    <string name="board_save_dialog_title">Type file name to save</string>
+    <string name="board_save_key">board_save_preference</string>
+    <string name="board_save_summary">Save your board!</string>
+    <string name="board_save_title">Save board</string>
 
     <string name="category_time">Time</string>
 

@@ -212,4 +212,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
         mRequiresRender = true;
     }
+
+    public JSONObject toJSONBoard() {
+        return mGameBoard.toJSONObject();
+    }
 }

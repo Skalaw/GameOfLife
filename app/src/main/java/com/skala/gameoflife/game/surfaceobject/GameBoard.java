@@ -108,6 +108,25 @@ public class GameBoard implements SurfaceObject {
         }
     }
 
+    public JSONObject toJSONObject() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("row", mRowCell);
+            jsonObject.put("column", mColumnCell);
+            JSONArray jsonArray = new JSONArray();
+            int size = mCellList.size();
+            for (int i = 0; i < size; i++) {
+                int isAlive = mCellList.get(i).isAlive() ? 1 : 0;
+                jsonArray.put(isAlive);
+            }
+            jsonObject.put("board", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+    }
+
     public void createBoard(int numberRow, int numberColumn) {
         mIsBoardValid = false;
         mRowCell = numberRow;

@@ -58,10 +58,24 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void loadBoard(String nameBoard) {
-            JSONObject jsonObject = FileUtils.getBoardJSONFromAssets(getApplicationContext(), nameBoard);
+        public void loadBoardFromAssets(String boardName) {
+            JSONObject jsonObject = FileUtils.getBoardJSONFromAssets(getApplicationContext(), boardName);
 
             mGameView.loadBoard(jsonObject);
+        }
+
+        @Override
+        public void loadBoardFromExternal(String boardName) {
+            JSONObject jsonObject = FileUtils.getBoardJSONFromFile(boardName);
+
+            mGameView.loadBoard(jsonObject);
+        }
+
+        @Override
+        public void saveBoardToExternal(String fileName) {
+            JSONObject jsonObject = mGameView.toJSONBoard();
+
+            FileUtils.saveBoardToExternal(fileName, jsonObject);
         }
     };
 
