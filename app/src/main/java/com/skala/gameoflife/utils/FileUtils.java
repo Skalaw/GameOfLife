@@ -1,6 +1,8 @@
 package com.skala.gameoflife.utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 
 import org.json.JSONException;
@@ -65,14 +67,18 @@ public class FileUtils {
         return getDirectoryBoards().list();
     }
 
-    public static void saveBoardToExternal(String fileName, JSONObject jsonObject) {
+    public static void saveBoardToExternal(Context context, String fileName, JSONObject jsonObject) {
         File file = new File(getDirectoryBoards(), fileName);
+        if (file.exists()) {
+            file.delete();
+        }
 
         try {
             file.createNewFile();
             BufferedWriter buf = new BufferedWriter(new FileWriter(file, true));
             buf.append(jsonObject.toString());
             buf.close();
+            addTomMediaScanner(context, file);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -117,5 +123,15 @@ public class FileUtils {
         }
 
         return file;
+    }
+
+    private static void addTomMediaScanner(Context context, File file) {
+        addTomMediaScanner(context, Uri.fromFile(file));
+    }
+
+    private static void addTomMediaScanner(Context context, Uri uri) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(uri);
+        context.sendBroadcast(mediaScanIntent);
     }
 }

@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
         public void saveBoardToExternal(String fileName) {
             JSONObject jsonObject = mGameView.toJSONBoard();
 
-            FileUtils.saveBoardToExternal(fileName, jsonObject);
+            FileUtils.saveBoardToExternal(getApplicationContext(), fileName, jsonObject);
         }
     };
 
