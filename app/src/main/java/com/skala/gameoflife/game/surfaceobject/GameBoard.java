@@ -19,6 +19,7 @@ public class GameBoard implements SurfaceObject {
     private int mSizeBoard;
     private int mOffsetX;
     private int mOffsetY;
+    private boolean mIsBoardValid = false;
 
     public GameBoard(int sizeBoard, int offsetX, int offsetY) {
         mSizeBoard = sizeBoard;
@@ -30,7 +31,11 @@ public class GameBoard implements SurfaceObject {
     public void onDraw(Canvas canvas) {
         int size = mCellList.size();
         for (int i = 0; i < size; i++) {
-            mCellList.get(i).onDraw(canvas);
+            if (mIsBoardValid) {
+                mCellList.get(i).onDraw(canvas);
+            } else {
+                break;
+            }
         }
     }
 
@@ -104,10 +109,12 @@ public class GameBoard implements SurfaceObject {
     }
 
     public void createBoard(int numberRow, int numberColumn) {
+        mIsBoardValid = false;
         mRowCell = numberRow;
         mColumnCell = numberColumn;
 
         mCellList = createBoard();
+        mIsBoardValid = true;
     }
 
     private ArrayList<Cell> createBoard() {
