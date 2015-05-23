@@ -1,6 +1,7 @@
 package com.skala.gameoflife.game.surfaceobject;
 
 import android.graphics.Canvas;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +14,8 @@ import java.util.Random;
  * @author Skala
  */
 public class GameBoard implements SurfaceObject {
+    private final String TAG = GameBoard.class.getName();
+
     private ArrayList<Cell> mCellList;
     private int mRowCell;
     private int mColumnCell;
@@ -87,9 +90,11 @@ public class GameBoard implements SurfaceObject {
             e.printStackTrace();
             isLoadSuccesful = false;
         }
-
-        if (jsonArray == null || jsonArray.length() != row * column) {
+        if (jsonArray == null) {
             isLoadSuccesful = false;
+        } else if (jsonArray.length() != row * column) {
+            isLoadSuccesful = false;
+            Log.d(TAG, "Error: length board is incorrect, array have:" + jsonArray.length() + " should: " + (row * column));
         }
 
         // load only when parse correct json
