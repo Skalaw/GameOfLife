@@ -9,10 +9,12 @@ import android.graphics.Rect;
  */
 
 public class TextObj implements SurfaceObject {
-    private Rect mRect;
-    private String mText;
+    private static final int PADDING_TEXT_TOP = 16;
     private static Paint mPaintText = new Paint();
     private static Paint mPaintRect = new Paint();
+
+    private Rect mRect;
+    private String mText;
 
     static {
         mPaintText.setTextAlign(Paint.Align.CENTER);
@@ -28,7 +30,7 @@ public class TextObj implements SurfaceObject {
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawRect(mRect, mPaintRect);
-        canvas.drawText(mText, mRect.centerX(), mRect.centerY() + 16, mPaintText);
+        canvas.drawText(mText, mRect.centerX(), mRect.centerY() + PADDING_TEXT_TOP, mPaintText);
     }
 
     @Override

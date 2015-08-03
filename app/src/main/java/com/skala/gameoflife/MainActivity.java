@@ -139,12 +139,14 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         // load settings drawer
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        mSettingsFragment = new SettingsFragment();
-        mSettingsFragment.setSettingsListener(mSettingsDrawerListener);
-        fragmentTransaction.add(R.id.leftDrawer, mSettingsFragment);
-        fragmentTransaction.commit();
+        if (savedInstanceState == null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            mSettingsFragment = new SettingsFragment();
+            mSettingsFragment.setSettingsListener(mSettingsDrawerListener);
+            fragmentTransaction.add(R.id.leftDrawer, mSettingsFragment);
+            fragmentTransaction.commit();
+        }
 
         // drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
