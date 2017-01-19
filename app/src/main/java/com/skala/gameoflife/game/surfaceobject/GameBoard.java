@@ -104,7 +104,7 @@ public class GameBoard implements SurfaceObject {
             int length = jsonArray.length();
             for (int i = 0; i < length; i++) {
                 try {
-                    boolean isAlive = (jsonArray.get(i) != 0);
+                    boolean isAlive = ((int) jsonArray.get(i) != 0);
                     mCellList.get(i).setIsAlive(isAlive);
                 } catch (JSONException e) {
                     e.printStackTrace();
